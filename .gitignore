@@ -1,0 +1,5 @@
+# .gitignore for Summerland Store
+.DS_Store
+Thumbs.db
+*.pyc
+__pycache__/

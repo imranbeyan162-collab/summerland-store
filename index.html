@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SUMMERLAND | Style On Point • Adama, Ethiopia</title>
+  
+  <!-- Telegram WebApp SDK for seamless Mini-App compatibility -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              yellow: '#FFC800',
+              yellowHover: '#E5B400',
+              gold: '#D4AF37',
+              dark: '#121214',
+              accent: '#E63946'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .font-brand-title {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.12em;
+    }
+  </style>
+</head>
+<body class="bg-[#F6F7F9] text-[#141416] antialiased selection:bg-[#FFC800] selection:text-black min-h-screen pb-24 md:pb-12">
+
+  <!-- Desktop Device Frame Wrapper for responsive elegance -->
+  <div id="app-container" class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative flex flex-col border-x border-gray-100 transition-all duration-300">
+    
+    <!-- Top Announcement Bar: Ras Hotel Location & TikTok link -->
+    <div class="bg-gradient-to-r from-neutral-900 via-neutral-800 to-black text-white text-xs px-4 py-2 flex items-center justify-between border-b border-neutral-700/50 shadow-sm">
+      <div class="flex items-center gap-1.5 text-[11px] text-gray-200">
+        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-yellow-400 shrink-0"></i>
+        <span class="truncate">Next to Adama Ras Hotel, Adama</span>
+      </div>
+      <a href="https://www.tiktok.com/@summerlandfashion" target="_blank" rel="noopener noreferrer" 
+         class="flex items-center gap-1 font-bold text-[10px] bg-yellow-400 text-black px-2 py-0.5 rounded-full hover:bg-yellow-300 transition shrink-0">
+        <span>@summerlandfashion</span>
+      </a>
+    </div>
+
+    <!-- Sticky Main Header (Bekollo Architecture Elevated) -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <!-- Brand Logo & Motto -->
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="resetToHome()">
+        <!-- Tuxedo Hanger Logo Badge -->
+        <div class="w-10 h-10 rounded-2xl bg-black border border-neutral-700 flex items-center justify-center text-white relative shadow-md overflow-hidden p-0.5">
+          <img src="assets/clean/logo_wall.jpg" alt="Logo" class="w-full h-full object-cover rounded-xl filter contrast-125">
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-extrabold text-lg tracking-wider text-black font-brand-title uppercase leading-none">Summerland</h1>
+            <span class="text-[9px] bg-yellow-400/20 text-amber-900 border border-yellow-400/40 font-bold px-1.5 py-0.2 rounded uppercase">Adama</span>
+          </div>
+          <p class="text-[10px] text-yellow-600 font-extrabold uppercase tracking-widest mt-0.5">Style On Point</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- Direct TikTok Shop Link -->
+        <a href="https://www.tiktok.com/@summerlandfashion" target="_blank" rel="noopener noreferrer" 
+           title="TikTok @summerlandfashion"
+           class="w-9 h-9 rounded-full bg-gray-100 hover:bg-black hover:text-white flex items-center justify-center text-gray-700 transition shadow-sm border border-gray-200">
+          <i data-lucide="video" class="w-4 h-4"></i>
+        </a>
+
+        <!-- Cart Pill Button (Bekollo Style) -->
+        <button id="header-cart-btn" onclick="openCartDrawer()" class="flex items-center gap-2 bg-[#121214] hover:bg-black text-white px-3.5 py-2 rounded-full font-semibold text-xs shadow-md transition active:scale-95 group">
+          <i data-lucide="shopping-bag" class="w-4 h-4 text-yellow-400 group-hover:scale-110 transition"></i>
+          <span>Cart</span>
+          <span id="cart-badge-count" class="bg-yellow-400 text-black text-[11px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center ml-0.5 shadow-sm">0</span>
+        </button>
+
+        <!-- User / Telegram Profile Avatar -->
+        <div id="user-avatar-btn" onclick="openProfileModal()" class="w-9 h-9 rounded-full bg-gray-100 border-2 border-yellow-400/80 overflow-hidden cursor-pointer hover:ring-2 hover:ring-yellow-300 transition flex items-center justify-center">
+          <img id="user-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+        </div>
+      </div>
+    </header>
+
+    <!-- Search & Quick Filter Bar -->
+    <section class="px-4 pt-3 pb-2 bg-white">
+      <div class="relative">
+        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search jeans, shirts, shoes, overcoats..." 
+          class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-gray-100 text-sm font-medium text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:bg-white border border-transparent focus:border-yellow-300 transition"
+          oninput="handleSearch(this.value)"
+        >
+        <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Categories Pill Navigation -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-3 mt-1 -mx-4 px-4 text-xs font-semibold">
+        <button onclick="setCategory('all')" class="cat-pill active px-4 py-2 rounded-full whitespace-nowrap transition bg-black text-white shadow-sm flex items-center gap-1.5" data-category="all">
+          <span>All Items</span>
+        </button>
+        <button onclick="setCategory('jeans')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="jeans">
+          <span>👖 Jeans & Denim</span>
+        </button>
+        <button onclick="setCategory('shirts')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="shirts">
+          <span>👔 Dress Shirts</span>
+        </button>
+        <button onclick="setCategory('shoes')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="shoes">
+          <span>👞 Shoes & Boots</span>
+        </button>
+        <button onclick="setCategory('coats')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="coats">
+          <span>🧥 Overcoats</span>
+        </button>
+        <button onclick="setCategory('accessories')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="accessories">
+          <span>✨ Leather Belts</span>
+        </button>
+        <button onclick="setCategory('tshirts')" class="cat-pill px-4 py-2 rounded-full whitespace-nowrap transition bg-gray-100 hover:bg-gray-200 text-gray-700 flex items-center gap-1.5" data-category="tshirts">
+          <span>👕 T-Shirts</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Clean Store Showcase Hero Banner -->
+    <section class="px-4 py-2">
+      <div class="relative overflow-hidden rounded-2xl bg-neutral-950 text-white shadow-xl border border-neutral-800">
+        <!-- Clean Store Interior Photo -->
+        <img src="assets/clean/neon_interior.jpg" alt="Summerland Boutique" class="absolute inset-0 w-full h-full object-cover opacity-40 filter brightness-75">
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+
+        <div class="relative z-10 p-5">
+          <div class="inline-flex items-center gap-1.5 bg-yellow-400 text-black font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full mb-2">
+            <span>Adama's Premier Boutique</span>
+          </div>
+          <h2 class="text-xl font-black tracking-tight leading-snug">
+            Not for everyone.<br><span class="text-yellow-400">For those who appreciate excellence.</span>
+          </h2>
+          <p class="text-xs text-gray-300 mt-1.5 max-w-[280px]">
+            Located next to Adama Ras Hotel. Turkish denim, Italian overcoats, luxury dress shirts, and genuine leather footwear.
+          </p>
+
+          <div class="mt-4 flex items-center gap-2">
+            <button onclick="openGalleryModal()" class="bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-black px-4 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+              <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+              <span>View Store Photos</span>
+            </button>
+            <button onclick="setCategory('jeans')" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-2 rounded-xl border border-white/20 transition">
+              Explore Denim
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Grid Section -->
+    <main class="flex-1 px-4 py-3">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <h3 id="category-title" class="text-base font-extrabold text-gray-900">Featured Summerland Collection</h3>
+          <p id="product-count-label" class="text-[11px] text-gray-400 font-medium">Showing premium items</p>
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+          <span>Sort:</span>
+          <select id="sort-select" onchange="handleSort(this.value)" class="bg-transparent font-semibold text-gray-800 outline-none cursor-pointer">
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Grid Cards -->
+      <div id="products-grid" class="grid grid-cols-2 gap-3.5">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="no-products-msg" class="hidden py-16 text-center">
+        <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+          <i data-lucide="search-x" class="w-8 h-8"></i>
+        </div>
+        <h4 class="font-bold text-gray-800 text-base">No items found</h4>
+        <p class="text-xs text-gray-500 mt-1">Try another search or filter keyword</p>
+        <button onclick="clearSearch()" class="mt-3 text-xs font-bold text-yellow-600 bg-yellow-50 hover:bg-yellow-100 px-4 py-2 rounded-lg">
+          Reset Filter
+        </button>
+      </div>
+
+      <!-- Physical Store Location Card -->
+      <section class="mt-8 mb-4 p-4 rounded-2xl bg-neutral-900 text-white border border-neutral-800 shadow-lg">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-yellow-400/20 flex items-center justify-center text-yellow-400 shrink-0">
+            <i data-lucide="map-pin" class="w-5 h-5"></i>
+          </div>
+          <div class="text-xs flex-1">
+            <div class="flex items-center justify-between">
+              <h4 class="font-extrabold text-white text-sm">Summerland Boutique Adama</h4>
+              <span class="text-[10px] bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-bold">Open Everyday</span>
+            </div>
+            <p class="text-gray-300 mt-1">📍 Located directly <strong>Next to Adama Ras Hotel</strong>, Adama, Ethiopia.</p>
+            
+            <div class="grid grid-cols-2 gap-2 mt-3 font-semibold text-gray-300 text-[11px]">
+              <div class="bg-neutral-800 p-2 rounded-xl flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-yellow-400"></i>
+                <span>8:30am - 8:30pm</span>
+              </div>
+              <a href="https://www.tiktok.com/@summerlandfashion" target="_blank" class="bg-neutral-800 p-2 rounded-xl flex items-center gap-1.5 hover:text-yellow-400 transition">
+                <i data-lucide="video" class="w-3.5 h-3.5 text-yellow-400"></i>
+                <span>@summerlandfashion</span>
+              </a>
+            </div>
+
+            <button onclick="openGalleryModal()" class="w-full mt-3 bg-neutral-800 hover:bg-neutral-700 text-yellow-400 text-xs font-bold py-2 rounded-xl border border-neutral-700 flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+              <span>View Clean Store Photos</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Floating Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-gray-200 px-6 py-2.5 z-20 flex items-center justify-between shadow-lg">
+      <button onclick="resetToHome()" class="flex flex-col items-center gap-1 text-yellow-500 font-bold group">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span class="text-[10px]">Shop</span>
+      </button>
+      <button onclick="openWishlistDrawer()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-black font-semibold transition group">
+        <div class="relative">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          <span id="wishlist-badge-count" class="hidden absolute -top-1.5 -right-2 bg-rose-500 text-white text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+        </div>
+        <span class="text-[10px]">Wishlist</span>
+      </button>
+      <button onclick="openCartDrawer()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-black font-semibold transition group">
+        <div class="relative">
+          <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+          <span id="bottom-cart-badge-count" class="bg-yellow-400 text-black text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center absolute -top-1.5 -right-2">0</span>
+        </div>
+        <span class="text-[10px]">Cart</span>
+      </button>
+      <button onclick="openGalleryModal()" class="flex flex-col items-center gap-1 text-gray-500 hover:text-black font-semibold transition group">
+        <i data-lucide="camera" class="w-5 h-5"></i>
+        <span class="text-[10px]">Photos</span>
+      </button>
+    </nav>
+
+    <!-- ==================== PRODUCT DETAILS BOTTOM SHEET MODAL (BEKOLLO REPLICA) ==================== -->
+    <div id="product-detail-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300">
+      <div id="modal-content" class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl max-h-[92vh] overflow-y-auto flex flex-col shadow-2xl animate-in slide-in-from-bottom duration-200">
+        
+        <!-- Mobile drag indicator -->
+        <div class="pt-3 pb-1 flex justify-center cursor-pointer" onclick="closeProductModal()">
+          <div class="w-12 h-1.5 bg-gray-300 rounded-full"></div>
+        </div>
+
+        <!-- Modal Header with Close Button -->
+        <div class="px-5 py-2 flex items-center justify-between border-b border-gray-100">
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Summerland Item</span>
+          <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black transition">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body Content -->
+        <div class="p-5 flex-1 overflow-y-auto space-y-4">
+          <!-- Main Product Image -->
+          <div class="relative w-full h-72 rounded-2xl overflow-hidden bg-gray-100 border border-gray-200/60">
+            <img id="modal-img" src="" alt="Product Image" class="w-full h-full object-cover">
+            <span id="modal-badge" class="absolute top-3 left-3 bg-black/80 text-white text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-sm border border-white/10">
+              Style On Point
+            </span>
+          </div>
+
+          <!-- Product Title and Price -->
+          <div class="flex items-start justify-between gap-3 pt-1">
+            <div>
+              <h2 id="modal-title" class="text-xl font-extrabold text-gray-900 leading-tight">Product Title</h2>
+              <span id="modal-category" class="inline-block mt-1 text-xs font-semibold text-yellow-700 bg-yellow-50 px-2.5 py-0.5 rounded-full border border-yellow-200">JEANS</span>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-gray-400 block font-medium">Price</span>
+              <span id="modal-price" class="text-2xl font-black text-gray-900">Br 0</span>
+            </div>
+          </div>
+
+          <!-- Quantity Selector (Matches Bekollo screenshot) -->
+          <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Quantity</span>
+            <div class="flex items-center gap-3 bg-gray-100 rounded-full px-3 py-1.5">
+              <button onclick="decrementModalQty()" class="w-6 h-6 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center shadow-sm hover:bg-gray-200 transition">
+                <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+              </button>
+              <span id="modal-qty" class="text-sm font-extrabold text-gray-900 w-4 text-center">1</span>
+              <button onclick="incrementModalQty()" class="w-6 h-6 rounded-full bg-white text-gray-800 font-bold flex items-center justify-center shadow-sm hover:bg-gray-200 transition">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Size Selector -->
+          <div class="space-y-2 pt-2 border-t border-gray-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Size</span>
+              <span id="selected-size-label" class="text-xs font-bold text-yellow-600">Size: 32</span>
+            </div>
+            <div id="modal-sizes-container" class="flex flex-wrap gap-2.5">
+              <!-- Dynamically rendered size bubbles -->
+            </div>
+          </div>
+
+          <!-- Color Selector -->
+          <div id="color-section" class="space-y-2 pt-2 border-t border-gray-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Color / Wash</span>
+              <span id="selected-color-label" class="text-xs font-bold text-yellow-600">Default</span>
+            </div>
+            <div id="modal-colors-container" class="flex flex-wrap gap-2">
+              <!-- Colors -->
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="space-y-1.5 pt-2 border-t border-gray-100">
+            <span class="text-xs font-bold uppercase tracking-wider text-gray-500">Description</span>
+            <p id="modal-description" class="text-xs text-gray-600 leading-relaxed">
+              Premium tailored clothing from Summerland Adama.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sticky Footer Buttons (Bekollo layout) -->
+        <div class="p-4 bg-white border-t border-gray-100 flex items-center gap-2.5">
+          <button id="modal-add-cart-btn" onclick="addToCartFromModal()" class="flex-1 border-2 border-gray-200 hover:border-black font-extrabold text-xs py-3.5 px-4 rounded-full text-black flex items-center justify-center gap-1.5 transition active:scale-95 relative">
+            <span>Add to Cart</span>
+            <span id="btn-cart-badge" class="bg-yellow-400 text-black text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center ml-1">1</span>
+          </button>
+          
+          <button id="modal-buy-now-btn" onclick="buyNowFromModal()" class="flex-1 bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 font-black text-xs py-3.5 px-4 rounded-full text-black shadow-md transition active:scale-95 flex items-center justify-center gap-1">
+            <span id="modal-buy-now-text">Buy Now · Br 0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CART DRAWER ==================== -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl max-h-[92vh] flex flex-col shadow-2xl">
+        <!-- Cart Header -->
+        <div class="px-5 py-4 flex items-center justify-between border-b border-gray-100">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-yellow-500"></i>
+            <h3 class="font-extrabold text-base text-gray-900">Summerland Bag</h3>
+            <span id="cart-count-title" class="bg-yellow-100 text-yellow-800 text-[11px] font-extrabold px-2 py-0.5 rounded-full">0</span>
+          </div>
+          <button onclick="closeCartDrawer()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="p-5 flex-1 overflow-y-auto space-y-3">
+          <!-- Rendered in app.js -->
+        </div>
+
+        <!-- Cart Footer -->
+        <div id="cart-footer" class="p-5 bg-gray-50 border-t border-gray-100 space-y-3">
+          <div class="space-y-1.5 text-xs text-gray-600">
+            <div class="flex justify-between">
+              <span>Subtotal</span>
+              <span id="cart-subtotal" class="font-bold text-gray-900">Br 0</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Pickup or Adama Delivery</span>
+              <span class="font-bold text-green-600">Free / Next to Ras Hotel</span>
+            </div>
+            <div class="flex justify-between text-base font-black text-gray-900 pt-2 border-t border-gray-200">
+              <span>Total</span>
+              <span id="cart-total" class="text-yellow-600">Br 0</span>
+            </div>
+          </div>
+
+          <button onclick="openCheckoutModal()" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black font-extrabold py-3.5 rounded-full text-sm shadow-md transition active:scale-95 flex items-center justify-center gap-2">
+            <span>Proceed to Checkout</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PHOTO GALLERY / STORE TOUR MODAL (CLEAN PHOTOS ONLY) ==================== -->
+    <div id="gallery-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-sm rounded-3xl p-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <button onclick="closeGalleryModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black z-10">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+
+        <div class="mb-4">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded">Real Store Gallery</span>
+          <h3 class="text-lg font-black text-gray-900 mt-1">Summerland Boutique</h3>
+          <p class="text-xs text-gray-500">Next to Adama Ras Hotel, Adama, Ethiopia</p>
+        </div>
+
+        <div class="space-y-3.5">
+          <!-- Clean Shirts Display -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/shirts_display.jpg" alt="Dress Shirts Display" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900 flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Turkish Slim-Fit Shirts</span>
+              <span class="text-[11px] text-yellow-400 font-extrabold">Br 1,450</span>
+            </div>
+          </div>
+
+          <!-- Clean Shoes & Boots Display -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/shoes_boots.jpg" alt="Shoes and Boots Display" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900 flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Leather Footwear & Boots</span>
+              <span class="text-[11px] text-yellow-400 font-extrabold">Br 3,200</span>
+            </div>
+          </div>
+
+          <!-- Clean Neon Interior Display -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/neon_interior.jpg" alt="Denim Bar & Interior" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900 flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Denim Lounge & Turkish Jeans</span>
+              <span class="text-[11px] text-yellow-400 font-extrabold">Br 1,950</span>
+            </div>
+          </div>
+
+          <!-- Clean Overcoat Display -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/overcoat.jpg" alt="Overcoat on Mannequin" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900 flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Executive Wool Overcoat</span>
+              <span class="text-[11px] text-yellow-400 font-extrabold">Br 4,800</span>
+            </div>
+          </div>
+
+          <!-- Clean Belts Display -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/belts.jpg" alt="Belts Rack" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900 flex items-center justify-between">
+              <span class="text-xs font-bold text-white">Genuine Leather Belts</span>
+              <span class="text-[11px] text-yellow-400 font-extrabold">Br 950</span>
+            </div>
+          </div>
+
+          <!-- Storefront -->
+          <div class="rounded-2xl overflow-hidden border border-gray-200 bg-black shadow-sm">
+            <img src="assets/clean/storefront.jpg" alt="Storefront Next to Ras Hotel" class="w-full h-56 object-cover">
+            <div class="p-2.5 bg-neutral-900">
+              <span class="text-xs font-bold text-white">Storefront Next to Ras Hotel</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
+          <a href="https://www.tiktok.com/@summerlandfashion" target="_blank" class="w-full bg-black text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 hover:bg-neutral-800 transition">
+            <i data-lucide="video" class="w-4 h-4 text-yellow-400"></i>
+            <span>Watch on TikTok @summerlandfashion</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PROFILE / CONTACT MODAL ==================== -->
+    <div id="profile-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="bg-white w-full max-w-sm rounded-3xl p-6 shadow-2xl relative">
+        <button onclick="closeProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+
+        <div class="text-center">
+          <div class="w-16 h-16 rounded-full overflow-hidden mx-auto mb-3 border-2 border-yellow-400 p-0.5 bg-black">
+            <img src="assets/clean/logo_wall.jpg" alt="Summerland Logo" class="w-full h-full object-cover rounded-full">
+          </div>
+          <h3 class="text-xl font-extrabold text-gray-900 uppercase font-brand-title">Summerland</h3>
+          <p class="text-xs text-yellow-600 font-extrabold tracking-widest uppercase">Style On Point</p>
+          <p class="text-xs text-gray-500 mt-2 max-w-[260px] mx-auto">
+            "Not for everyone. For those who appreciate excellence." ✨
+          </p>
+
+          <div class="my-4 p-3 rounded-2xl bg-gray-50 border border-gray-200 text-left text-xs space-y-1.5">
+            <div class="flex items-center gap-2 text-gray-700">
+              <i data-lucide="map-pin" class="w-4 h-4 text-yellow-500 shrink-0"></i>
+              <span>Next to Adama Ras Hotel, Adama, Ethiopia</span>
+            </div>
+            <div class="flex items-center gap-2 text-gray-700">
+              <i data-lucide="video" class="w-4 h-4 text-yellow-500 shrink-0"></i>
+              <a href="https://www.tiktok.com/@summerlandfashion" target="_blank" class="font-bold hover:underline">TikTok: @summerlandfashion</a>
+            </div>
+            <div class="flex items-center gap-2 text-gray-700">
+              <i data-lucide="phone" class="w-4 h-4 text-green-500 shrink-0"></i>
+              <span>Direct Phone & Telegram Support</span>
+            </div>
+          </div>
+
+          <a href="https://t.me/summerlandfashion" target="_blank" class="w-full bg-[#2AABEE] hover:bg-[#229ED9] text-white font-bold py-3 px-4 rounded-full text-xs flex items-center justify-center gap-2 shadow transition">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Message on Telegram</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ADAMA CHECKOUT MODAL ==================== -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div class="bg-white w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl max-h-[92vh] overflow-y-auto p-5 shadow-2xl flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+          <h3 class="font-extrabold text-base text-gray-900 flex items-center gap-2">
+            <i data-lucide="truck" class="w-5 h-5 text-yellow-500"></i>
+            <span>Order & Delivery Details</span>
+          </h3>
+          <button onclick="closeCheckoutModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 hover:text-black">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="mt-4 space-y-3.5 text-xs">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Your Full Name</label>
+            <input type="text" id="cust-name" required placeholder="e.g., Dawit / Alpha" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-yellow-400 text-xs">
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Phone Number (Ethiopia)</label>
+            <div class="flex">
+              <span class="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-gray-200 bg-gray-50 text-gray-500 font-bold text-xs">+251</span>
+              <input type="tel" id="cust-phone" required placeholder="91 234 5678" class="flex-1 px-3.5 py-2.5 rounded-r-xl border border-gray-200 focus:outline-none focus:border-yellow-400 text-xs">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Pickup or Delivery in Adama</label>
+            <select id="cust-locality" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-yellow-400 text-xs bg-white">
+              <option value="Pick up at Summerland (Next to Ras Hotel)">Pick up at Store (Next to Ras Hotel)</option>
+              <option value="Posta Bet / City Center">Posta Bet / City Center (Adama)</option>
+              <option value="Bole Adama">Bole Adama</option>
+              <option value="ASTU University Campus">ASTU (Adama Science & Tech Univ)</option>
+              <option value="Kebele 03 / Kebele 04">Kebele 03 / Kebele 04</option>
+              <option value="Adama Stadium / Arada">Adama Stadium / Arada</option>
+              <option value="Other Adama Location">Other (Provide notes below)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">Specific Address / Landmark</label>
+            <input type="text" id="cust-address" required placeholder="Near hotel, cafe, house number or pickup..." class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-yellow-400 text-xs">
+          </div>
+
+          <!-- Payment Methods -->
+          <div>
+            <label class="block font-bold text-gray-700 mb-2">Payment Method</label>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="payment-card border-2 border-yellow-400 bg-yellow-50 rounded-xl p-2.5 flex flex-col items-center cursor-pointer text-center">
+                <input type="radio" name="payment_method" value="Telebirr" checked class="hidden">
+                <span class="font-extrabold text-[11px] text-gray-900">Telebirr</span>
+                <span class="text-[9px] text-blue-600 font-bold mt-0.5">Instant Pay</span>
+              </label>
+              <label class="payment-card border border-gray-200 rounded-xl p-2.5 flex flex-col items-center cursor-pointer text-center">
+                <input type="radio" name="payment_method" value="CBE Birr" class="hidden">
+                <span class="font-extrabold text-[11px] text-gray-900">CBE Birr</span>
+                <span class="text-[9px] text-purple-600 font-bold mt-0.5">Commercial Bank</span>
+              </label>
+              <label class="payment-card border border-gray-200 rounded-xl p-2.5 flex flex-col items-center cursor-pointer text-center">
+                <input type="radio" name="payment_method" value="Cash on Delivery" class="hidden">
+                <span class="font-extrabold text-[11px] text-gray-900">Cash</span>
+                <span class="text-[9px] text-green-600 font-bold mt-0.5">On Pickup/Drop</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Order Summary Box -->
+          <div class="p-3 bg-gray-50 rounded-xl border border-gray-200 flex justify-between items-center text-xs">
+            <span class="font-bold text-gray-600">Total Due:</span>
+            <span id="checkout-total-amt" class="font-black text-sm text-yellow-600">Br 0</span>
+          </div>
+
+          <!-- Send Order Buttons -->
+          <div class="space-y-2 pt-2">
+            <button type="submit" class="w-full bg-[#2AABEE] hover:bg-[#229ED9] text-white font-extrabold py-3 rounded-full text-xs flex items-center justify-center gap-2 shadow-md transition active:scale-95">
+              <i data-lucide="send" class="w-4 h-4"></i>
+              <span>Send Order to Summerland via Telegram</span>
+            </button>
+            <button type="button" onclick="handleWhatsAppOrder()" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-extrabold py-3 rounded-full text-xs flex items-center justify-center gap-2 shadow-md transition active:scale-95">
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>Send Order via WhatsApp</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification for Add to Cart / Feedback -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-black text-white px-4 py-2.5 rounded-full text-xs font-bold shadow-2xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none translate-y-[-10px]">
+      <i data-lucide="check-circle" class="w-4 h-4 text-yellow-400"></i>
+      <span id="toast-message">Added to cart!</span>
+    </div>
+
+  </div>
+
+  <script src="products.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

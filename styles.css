@@ -1,0 +1,81 @@
+/* Custom styling for Samarland Store */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide scrollbar for category pill sliders */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Category pill active states */
+.cat-pill.active {
+  background-color: #141416 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Product Card Styling */
+.product-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+}
+
+/* Size selector pill */
+.size-chip {
+  transition: all 0.15s ease;
+}
+.size-chip.active {
+  background-color: #FFC800 !important;
+  color: #000000 !important;
+  font-weight: 800 !important;
+  border-color: #FFC800 !important;
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(255, 200, 0, 0.4);
+}
+
+/* Payment card selection */
+.payment-card input[type="radio"]:checked + span {
+  color: #000;
+}
+
+/* Smooth modal bottom sheet animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Floating badge pulse */
+@keyframes softPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.pulse-badge {
+  animation: softPulse 2s infinite ease-in-out;
+}
